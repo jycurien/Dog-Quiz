@@ -8,10 +8,12 @@ function App() {
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [choices, setChoices] = useState([])
   const [answers, setAnswers] = useState([])
+  const [displayResults, setDisplayResults] = useState(false)
 
   const QUIZ_LENGTH = 5
 
   const buidQuestionsList = async () => {
+    setDisplayResults(false)
     const breedsArray = shuffleArray(breeds).slice(0, QUIZ_LENGTH)
     setQuestions(breedsArray)
     const imgSrc = await getQuestionImg(breedsArray[0])
@@ -87,6 +89,34 @@ function App() {
     setAnswers(newAnswers)
   }
 
+  const score = questions.reduce((acc, question, index) => {
+    if (question === answers[index]) {
+      return acc + 1
+    }
+    return acc
+  }, 0)
+
+  const results = (
+    <div>
+      <div className='result'>
+        <b>
+          Your score: {score}/{questions.length}
+        </b>
+      </div>
+      {questions.map((question, index) => (
+        <div className='result' key={question}>
+          <div>Correct answer: {question?.split('/').reverse().join(' ')}</div>
+          <div>
+            Your answer:{' '}
+            <span className={question === answers[index] ? 'right' : 'wrong'}>
+              {answers[index]?.split('/').reverse().join(' ')}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+
   return (
     <main>
       <h1>
@@ -94,7 +124,12 @@ function App() {
       </h1>
       {errorMessage && <div>{errorMessage}</div>}
       <div>
-        {currentQuestion !== null ? (
+        {displayResults ? (
+          <div>
+            {results}
+            <button onClick={buidQuestionsList}>Start New Quiz</button>
+          </div>
+        ) : currentQuestion !== null ? (
           <div>
             <div className='imgContainer'>
               <img src={currentQuestion.image} />
@@ -117,15 +152,20 @@ function App() {
                 ))}
               </div>
             )}
-            {currentQuestion.index < questions.length - 1 && (
-              <div>
-                <button
-                  onClick={displayNextQuestion}
-                  disabled={answers[currentQuestion.index] === undefined}
-                >
-                  Next Question
-                </button>
-              </div>
+            {currentQuestion.index < questions.length - 1 ? (
+              <button
+                onClick={displayNextQuestion}
+                disabled={answers[currentQuestion.index] === undefined}
+              >
+                Next Question
+              </button>
+            ) : (
+              <button
+                onClick={() => setDisplayResults(true)}
+                disabled={answers[currentQuestion.index] === undefined}
+              >
+                See Results
+              </button>
             )}
           </div>
         ) : (

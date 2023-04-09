@@ -8,6 +8,11 @@ html {
     box-sizing: inherit;
 }
 
+body {
+    background-color: #fefefe;
+    color: #111111
+}
+
 main {
     max-width: 800px;
     margin: auto;
@@ -46,7 +51,8 @@ button {
     object-fit: contain;
 }
 
-.choice {
+.choice,
+.result {
     font-size: 1.25rem;
     margin-block: 1rem;
     text-transform: capitalize;
@@ -56,4 +62,12 @@ button {
 .choice label {
     margin: 0.25rem;
     cursor: pointer;
+}
+
+.right {
+    color: green;
+}
+
+.wrong {
+    color: red;
 }
