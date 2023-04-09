@@ -7,11 +7,13 @@ function App() {
   const [questions, setQuestions] = useState([])
   const [currentQuestion, setCurrentQuestion] = useState(null)
 
+  const QUIZ_LENGTH = 5
+
   const buidQuestionsList = async () => {
-    const breedsArray = shuffleArray(breeds).slice(0, 5)
+    const breedsArray = shuffleArray(breeds).slice(0, QUIZ_LENGTH)
     setQuestions(breedsArray)
     const imgSrc = await getQuestionImg(breedsArray[0])
-    setCurrentQuestion(imgSrc)
+    setCurrentQuestion({ index: 0, image: imgSrc })
   }
 
   const getQuestionImg = async (breed) => {
@@ -21,6 +23,14 @@ function App() {
       return data.message
     }
     setErrorMessage('Something went wrong!')
+  }
+
+  const displayNextQuestion = async () => {
+    const nextIndex = currentQuestion.index + 1
+    if (nextIndex < questions.length) {
+      const imgSrc = await getQuestionImg(questions[nextIndex])
+      setCurrentQuestion({ index: nextIndex, image: imgSrc })
+    }
   }
 
   useEffect(() => {
@@ -50,17 +60,28 @@ function App() {
   }, [])
 
   return (
-    <div>
-      <h1>Dog Quiz</h1>
+    <main>
+      <h1>
+        <span>🐕</span> Dog Quiz 🐕
+      </h1>
       {errorMessage && <div>{errorMessage}</div>}
       <div>
         {currentQuestion !== null ? (
-          <img src={currentQuestion} />
+          <div>
+            <div className='imgContainer'>
+              <img src={currentQuestion.image} />
+            </div>
+            {currentQuestion.index < questions.length - 1 && (
+              <div>
+                <button onClick={displayNextQuestion}>Next Question</button>
+              </div>
+            )}
+          </div>
         ) : (
           <button onClick={buidQuestionsList}>Start Quiz</button>
         )}
       </div>
-    </div>
+    </main>
   )
 }
 
