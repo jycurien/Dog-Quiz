@@ -7,6 +7,7 @@ function App() {
   const [questions, setQuestions] = useState([])
   const [currentQuestion, setCurrentQuestion] = useState(null)
   const [choices, setChoices] = useState([])
+  const [answers, setAnswers] = useState([])
 
   const QUIZ_LENGTH = 5
 
@@ -80,6 +81,12 @@ function App() {
     return () => {}
   }, [])
 
+  const saveAnswer = (e) => {
+    const newAnswers = [...answers]
+    newAnswers[currentQuestion.index] = e.target.value
+    setAnswers(newAnswers)
+  }
+
   return (
     <main>
       <h1>
@@ -101,6 +108,7 @@ function App() {
                       name='choice'
                       type='radio'
                       value={choice}
+                      onChange={saveAnswer}
                     />
                     <label htmlFor={choice}>
                       {choice.split('/').reverse().join(' ')}
@@ -111,7 +119,12 @@ function App() {
             )}
             {currentQuestion.index < questions.length - 1 && (
               <div>
-                <button onClick={displayNextQuestion}>Next Question</button>
+                <button
+                  onClick={displayNextQuestion}
+                  disabled={answers[currentQuestion.index] === undefined}
+                >
+                  Next Question
+                </button>
               </div>
             )}
           </div>
