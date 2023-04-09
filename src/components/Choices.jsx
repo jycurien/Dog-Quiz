@@ -5,7 +5,7 @@ const Choices = ({ breeds, question, onChange }) => {
   const [choices, setChoices] = useState([])
 
   useEffect(() => {
-    const correctChoice = question.breed
+    const correctChoice = question
     const tmpChoices = [
       correctChoice,
       ...shuffleArray(breeds)

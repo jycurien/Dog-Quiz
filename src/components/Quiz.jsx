@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import shuffleArray from '../utils/shuffleArray'
 import Button from './Button'
+import Question from './Question'
 import Choices from './Choices'
 import Results from './Results'
 
@@ -8,7 +9,7 @@ const Quiz = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [breeds, setBreeds] = useState([])
   const [questions, setQuestions] = useState([])
-  const [currentQuestion, setCurrentQuestion] = useState(null)
+  const [questionIndex, setQuestionIndex] = useState(null)
   const [answers, setAnswers] = useState([])
   const [displayResults, setDisplayResults] = useState(false)
 
@@ -17,33 +18,16 @@ const Quiz = () => {
   const buidQuestionsList = async () => {
     setDisplayResults(false)
     setAnswers([])
-    setCurrentQuestion(null)
+    setQuestionIndex(null)
     const breedsArray = shuffleArray(breeds).slice(0, QUIZ_LENGTH)
     setQuestions(breedsArray)
-    const imgSrc = await getQuestionImg(breedsArray[0])
-    const question = { index: 0, image: imgSrc, breed: breedsArray[0] }
-    setCurrentQuestion(question)
-  }
-
-  const getQuestionImg = async (breed) => {
-    const res = await fetch(`https://dog.ceo/api/breed/${breed}/images/random`)
-    if (res.ok) {
-      const data = await res.json()
-      return data.message
-    }
-    setErrorMessage('Something went wrong!')
+    setQuestionIndex(0)
   }
 
   const displayNextQuestion = async () => {
-    const nextIndex = currentQuestion.index + 1
+    const nextIndex = questionIndex + 1
     if (nextIndex < questions.length) {
-      const imgSrc = await getQuestionImg(questions[nextIndex])
-      const question = {
-        index: nextIndex,
-        image: imgSrc,
-        breed: questions[nextIndex],
-      }
-      setCurrentQuestion(question)
+      setQuestionIndex(nextIndex)
     }
   }
 
@@ -74,7 +58,7 @@ const Quiz = () => {
 
   const saveAnswer = (e) => {
     const newAnswers = [...answers]
-    newAnswers[currentQuestion.index] = e.target.value
+    newAnswers[questionIndex] = e.target.value
     setAnswers(newAnswers)
   }
 
@@ -93,25 +77,27 @@ const Quiz = () => {
           <Results questions={questions} answers={answers} />
           <Button handleClick={buidQuestionsList}>Start New Quiz</Button>
         </>
-      ) : currentQuestion !== null ? (
+      ) : questionIndex !== null ? (
         <>
-          <div className='imgContainer'>
-            <img src={currentQuestion.image} />
-          </div>
+          <Question
+            questions={questions}
+            index={questionIndex}
+            setErrorMessage={setErrorMessage}
+          />
           <Choices
             breeds={breeds}
-            question={currentQuestion}
+            question={questions[questionIndex]}
             onChange={saveAnswer}
           />
           <Button
             handleClick={
-              currentQuestion.index < questions.length - 1
+              questionIndex < questions.length - 1
                 ? displayNextQuestion
                 : () => setDisplayResults(true)
             }
-            disabled={answers[currentQuestion.index] === undefined}
+            disabled={answers[questionIndex] === undefined}
           >
-            {currentQuestion.index < questions.length - 1
+            {questionIndex < questions.length - 1
               ? 'Next Question'
               : 'See Results'}
           </Button>
