@@ -6,6 +6,7 @@ function App() {
   const [breeds, setBreeds] = useState([])
   const [questions, setQuestions] = useState([])
   const [currentQuestion, setCurrentQuestion] = useState(null)
+  const [choices, setChoices] = useState([])
 
   const QUIZ_LENGTH = 5
 
@@ -13,7 +14,9 @@ function App() {
     const breedsArray = shuffleArray(breeds).slice(0, QUIZ_LENGTH)
     setQuestions(breedsArray)
     const imgSrc = await getQuestionImg(breedsArray[0])
-    setCurrentQuestion({ index: 0, image: imgSrc })
+    const question = { index: 0, image: imgSrc, breed: breedsArray[0] }
+    setCurrentQuestion(question)
+    getChoices(question)
   }
 
   const getQuestionImg = async (breed) => {
@@ -29,8 +32,26 @@ function App() {
     const nextIndex = currentQuestion.index + 1
     if (nextIndex < questions.length) {
       const imgSrc = await getQuestionImg(questions[nextIndex])
-      setCurrentQuestion({ index: nextIndex, image: imgSrc })
+      const question = {
+        index: nextIndex,
+        image: imgSrc,
+        breed: questions[nextIndex],
+      }
+      setCurrentQuestion(question)
+      getChoices(question)
     }
+  }
+
+  const getChoices = (question) => {
+    const correctChoice = question.breed
+    const tmpChoices = [
+      correctChoice,
+      ...shuffleArray(breeds)
+        .slice(0, 4)
+        .filter((breed) => breed !== correctChoice)
+        .slice(0, 3),
+    ]
+    setChoices(shuffleArray(tmpChoices))
   }
 
   useEffect(() => {
@@ -71,6 +92,23 @@ function App() {
             <div className='imgContainer'>
               <img src={currentQuestion.image} />
             </div>
+            {choices.length && (
+              <div>
+                {choices.map((choice) => (
+                  <div className='choice' key={choice}>
+                    <input
+                      id={choice}
+                      name='choice'
+                      type='radio'
+                      value={choice}
+                    />
+                    <label htmlFor={choice}>
+                      {choice.split('/').reverse().join(' ')}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
             {currentQuestion.index < questions.length - 1 && (
               <div>
                 <button onClick={displayNextQuestion}>Next Question</button>
