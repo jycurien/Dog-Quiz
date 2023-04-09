@@ -84,7 +84,6 @@ function App() {
   const saveAnswer = (e) => {
     const newAnswers = [...answers]
     newAnswers[currentQuestion.index] = e.target.value
-    console.log(newAnswers)
     setAnswers(newAnswers)
   }
 
