@@ -109,6 +109,7 @@ const Quiz = () => {
                 ? displayNextQuestion
                 : () => setDisplayResults(true)
             }
+            disabled={answers[currentQuestion.index] === undefined}
           >
             {currentQuestion.index < questions.length - 1
               ? 'Next Question'
