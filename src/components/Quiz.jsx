@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import shuffleArray from '../utils/shuffleArray'
 import Button from './Button'
 import Question from './Question'
+import Choices from './Choices'
 
 const Quiz = () => {
   const [errorMessage, setErrorMessage] = useState(null)
@@ -64,6 +65,7 @@ const Quiz = () => {
       {questionIndex !== null ? (
         <>
           <Question question={question} setErrorMessage={setErrorMessage} />
+          <Choices breeds={breeds} question={question} onChange={() => null} />
           <Button onClick={displayNextQuestion}>Next Question</Button>
         </>
       ) : (
