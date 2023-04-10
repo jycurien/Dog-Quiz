@@ -9,6 +9,7 @@ const Quiz = () => {
   const [breeds, setBreeds] = useState([])
   const [questions, setQuestions] = useState([])
   const [questionIndex, setQuestionIndex] = useState(null)
+  const [answers, setAnswers] = useState([])
 
   const QUIZ_LENGTH = 5
 
@@ -52,6 +53,12 @@ const Quiz = () => {
     fetchBreeds()
   }, [])
 
+  const saveAnswer = (e) => {
+    const newAnswers = [...answers]
+    newAnswers[questionIndex] = e.target.value
+    setAnswers(newAnswers)
+  }
+
   if (errorMessage) {
     return (
       <main>
@@ -65,8 +72,13 @@ const Quiz = () => {
       {questionIndex !== null ? (
         <>
           <Question question={question} setErrorMessage={setErrorMessage} />
-          <Choices breeds={breeds} question={question} onChange={() => null} />
-          <Button onClick={displayNextQuestion}>Next Question</Button>
+          <Choices breeds={breeds} question={question} onChange={saveAnswer} />
+          <Button
+            onClick={displayNextQuestion}
+            disabled={answers[questionIndex] === undefined}
+          >
+            Next Question
+          </Button>
         </>
       ) : (
         <Button onClick={buidQuestionsList}>Start Quiz</Button>
