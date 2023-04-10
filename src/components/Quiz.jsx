@@ -75,7 +75,7 @@ const Quiz = () => {
       {displayResults ? (
         <>
           <Results questions={questions} answers={answers} />
-          <Button handleClick={buidQuestionsList}>Start New Quiz</Button>
+          <Button onClick={buidQuestionsList}>Start New Quiz</Button>
         </>
       ) : questionIndex !== null ? (
         <>
@@ -90,7 +90,7 @@ const Quiz = () => {
             onChange={saveAnswer}
           />
           <Button
-            handleClick={
+            onClick={
               questionIndex < questions.length - 1
                 ? displayNextQuestion
                 : () => setDisplayResults(true)
@@ -103,7 +103,7 @@ const Quiz = () => {
           </Button>
         </>
       ) : (
-        <Button handleClick={buidQuestionsList}>Start Quiz</Button>
+        <Button onClick={buidQuestionsList}>Start Quiz</Button>
       )}
     </main>
   )
