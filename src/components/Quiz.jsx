@@ -3,6 +3,7 @@ import shuffleArray from '../utils/shuffleArray'
 import Button from './Button'
 import Question from './Question'
 import Choices from './Choices'
+import Results from './Results'
 
 const Quiz = () => {
   const [errorMessage, setErrorMessage] = useState(null)
@@ -10,10 +11,14 @@ const Quiz = () => {
   const [questions, setQuestions] = useState([])
   const [questionIndex, setQuestionIndex] = useState(null)
   const [answers, setAnswers] = useState([])
+  const [displayResults, setDisplayResults] = useState(false)
 
   const QUIZ_LENGTH = 5
 
   const buidQuestionsList = () => {
+    setDisplayResults(false)
+    setAnswers([])
+    setQuestionIndex(null)
     const breedsArray = shuffleArray(breeds).slice(0, QUIZ_LENGTH)
     setQuestions(breedsArray)
     setQuestionIndex(0)
@@ -67,6 +72,15 @@ const Quiz = () => {
     )
   }
 
+  if (displayResults) {
+    return (
+      <main>
+        <Results questions={questions} answers={answers} />
+        <Button onClick={buidQuestionsList}>Start New Quiz</Button>
+      </main>
+    )
+  }
+
   return (
     <main>
       {questionIndex !== null ? (
@@ -74,10 +88,16 @@ const Quiz = () => {
           <Question question={question} setErrorMessage={setErrorMessage} />
           <Choices breeds={breeds} question={question} onChange={saveAnswer} />
           <Button
-            onClick={displayNextQuestion}
+            onClick={
+              questionIndex < questions.length - 1
+                ? displayNextQuestion
+                : () => setDisplayResults(true)
+            }
             disabled={answers[questionIndex] === undefined}
           >
-            Next Question
+            {questionIndex < questions.length - 1
+              ? 'Next Question'
+              : 'See Results'}
           </Button>
         </>
       ) : (
