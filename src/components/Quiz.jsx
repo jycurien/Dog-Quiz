@@ -9,7 +9,7 @@ const Quiz = () => {
 
   const QUIZ_LENGTH = 5
 
-  const buidQuestionsList = async () => {
+  const buidQuestionsList = () => {
     const breedsArray = shuffleArray(breeds).slice(0, QUIZ_LENGTH)
     setQuestions(breedsArray)
     console.log(breedsArray)
