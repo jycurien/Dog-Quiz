@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const Question = ({ questions, index, setErrorMessage }) => {
+const Question = ({ question, setErrorMessage }) => {
   const [imgSrc, setImgSrc] = useState(null)
 
   const getQuestionImg = async (breed) => {
@@ -15,10 +15,10 @@ const Question = ({ questions, index, setErrorMessage }) => {
 
   useEffect(() => {
     const fetchImg = async () => {
-      await getQuestionImg(questions[index])
+      await getQuestionImg(question)
     }
     fetchImg()
-  }, [questions, index])
+  }, [question])
 
   if (imgSrc === null) {
     return null

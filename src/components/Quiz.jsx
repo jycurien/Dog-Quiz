@@ -31,6 +31,8 @@ const Quiz = () => {
     }
   }
 
+  const question = questionIndex !== null ? questions[questionIndex] : null
+
   useEffect(() => {
     const fetchBreeds = async () => {
       const res = await fetch('https://dog.ceo/api/breeds/list/all')
@@ -79,11 +81,7 @@ const Quiz = () => {
         </>
       ) : questionIndex !== null ? (
         <>
-          <Question
-            questions={questions}
-            index={questionIndex}
-            setErrorMessage={setErrorMessage}
-          />
+          <Question question={question} setErrorMessage={setErrorMessage} />
           <Choices
             breeds={breeds}
             question={questions[questionIndex]}
