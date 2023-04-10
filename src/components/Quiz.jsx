@@ -1,19 +1,30 @@
 import { useState, useEffect } from 'react'
 import shuffleArray from '../utils/shuffleArray'
 import Button from './Button'
+import Question from './Question'
 
 const Quiz = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [breeds, setBreeds] = useState([])
   const [questions, setQuestions] = useState([])
+  const [questionIndex, setQuestionIndex] = useState(null)
 
   const QUIZ_LENGTH = 5
 
   const buidQuestionsList = () => {
     const breedsArray = shuffleArray(breeds).slice(0, QUIZ_LENGTH)
     setQuestions(breedsArray)
-    console.log(breedsArray)
+    setQuestionIndex(0)
   }
+
+  const displayNextQuestion = async () => {
+    const nextIndex = questionIndex + 1
+    if (nextIndex < questions.length) {
+      setQuestionIndex(nextIndex)
+    }
+  }
+
+  const question = questionIndex !== null ? questions[questionIndex] : null
 
   useEffect(() => {
     const fetchBreeds = async () => {
@@ -50,7 +61,14 @@ const Quiz = () => {
 
   return (
     <main>
-      <Button onClick={buidQuestionsList}>Start Quiz</Button>
+      {questionIndex !== null ? (
+        <>
+          <Question question={question} setErrorMessage={setErrorMessage} />
+          <Button onClick={displayNextQuestion}>Next Question</Button>
+        </>
+      ) : (
+        <Button onClick={buidQuestionsList}>Start Quiz</Button>
+      )}
     </main>
   )
 }
