@@ -3,7 +3,6 @@ import shuffleArray from '../utils/shuffleArray'
 
 const Choices = ({ breeds, question, onSelectChoice }) => {
   const [choices, setChoices] = useState([])
-  const [selectedChoice, setSelectedChoice] = useState(null)
 
   useEffect(() => {
     const correctChoice = question
@@ -18,9 +17,7 @@ const Choices = ({ breeds, question, onSelectChoice }) => {
   }, [question])
 
   const handleChoiceChange = (e) => {
-    const newChoice = e.target.value
-    setSelectedChoice(newChoice)
-    onSelectChoice(newChoice)
+    onSelectChoice(e.target.value)
   }
 
   return (
@@ -33,7 +30,6 @@ const Choices = ({ breeds, question, onSelectChoice }) => {
               name='choice'
               type='radio'
               value={choice}
-              checked={selectedChoice === choice}
               onChange={handleChoiceChange}
             />
             <label htmlFor={choice}>
