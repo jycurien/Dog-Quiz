@@ -52,8 +52,6 @@ const Quiz = () => {
       } else {
         setErrorMessage('Something went wrong!')
       }
-
-      return res
     }
     fetchBreeds()
   }, [])
