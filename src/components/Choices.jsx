@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import shuffleArray from '../utils/shuffleArray'
 
-const Choices = ({ breeds, question, onChange }) => {
+const Choices = ({ breeds, question, onSelectChoice }) => {
   const [choices, setChoices] = useState([])
+  const [selectedChoice, setSelectedChoice] = useState(null)
 
   useEffect(() => {
     const correctChoice = question
@@ -16,6 +17,12 @@ const Choices = ({ breeds, question, onChange }) => {
     setChoices(shuffleArray(tmpChoices))
   }, [question])
 
+  const handleChoiceChange = (e) => {
+    const newChoice = e.target.value
+    setSelectedChoice(newChoice)
+    onSelectChoice(newChoice)
+  }
+
   return (
     <div className='choices'>
       {choices.length &&
@@ -26,7 +33,8 @@ const Choices = ({ breeds, question, onChange }) => {
               name='choice'
               type='radio'
               value={choice}
-              onChange={onChange}
+              checked={selectedChoice === choice}
+              onChange={handleChoiceChange}
             />
             <label htmlFor={choice}>
               {choice.split('/').reverse().join(' ')}
