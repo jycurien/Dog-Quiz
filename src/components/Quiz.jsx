@@ -15,7 +15,7 @@ const Quiz = () => {
 
   const QUIZ_LENGTH = 5
 
-  const buidQuestionsList = async () => {
+  const buidQuestionsList = () => {
     setDisplayResults(false)
     setAnswers([])
     setQuestionIndex(null)
@@ -52,8 +52,6 @@ const Quiz = () => {
       } else {
         setErrorMessage('Something went wrong!')
       }
-
-      return res
     }
     fetchBreeds()
   }, [])
@@ -72,21 +70,21 @@ const Quiz = () => {
     )
   }
 
+  if (displayResults) {
+    return (
+      <main>
+        <Results questions={questions} answers={answers} />
+        <Button onClick={buidQuestionsList}>Start New Quiz</Button>
+      </main>
+    )
+  }
+
   return (
     <main>
-      {displayResults ? (
-        <>
-          <Results questions={questions} answers={answers} />
-          <Button onClick={buidQuestionsList}>Start New Quiz</Button>
-        </>
-      ) : questionIndex !== null ? (
+      {questionIndex !== null ? (
         <>
           <Question question={question} setErrorMessage={setErrorMessage} />
-          <Choices
-            breeds={breeds}
-            question={questions[questionIndex]}
-            onChange={saveAnswer}
-          />
+          <Choices breeds={breeds} question={question} onChange={saveAnswer} />
           <Button
             onClick={
               questionIndex < questions.length - 1

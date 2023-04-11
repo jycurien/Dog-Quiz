@@ -1,10 +1,8 @@
 const Results = ({ questions, answers }) => {
-  const score = questions.reduce((acc, question, index) => {
-    if (question === answers[index]) {
-      return acc + 1
-    }
-    return acc
-  }, 0)
+  const score = questions.reduce(
+    (acc, question, index) => (question === answers[index] ? acc + 1 : acc),
+    0
+  )
 
   return (
     <div>
