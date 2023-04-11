@@ -51,9 +51,9 @@ const Quiz = () => {
     fetchBreeds()
   }, [])
 
-  const saveAnswer = (e) => {
+  const handleSelectChoice = (selectedChoice) => {
     const newAnswers = [...answers]
-    newAnswers[questionIndex] = e.target.value
+    newAnswers[questionIndex] = selectedChoice
     setAnswers(newAnswers)
   }
 
@@ -70,7 +70,11 @@ const Quiz = () => {
       {questionIndex !== null ? (
         <>
           <Question question={question} setErrorMessage={setErrorMessage} />
-          <Choices breeds={breeds} question={question} onChange={saveAnswer} />
+          <Choices
+            breeds={breeds}
+            question={question}
+            onSelectChoice={handleSelectChoice}
+          />
           <Button
             onClick={displayNextQuestion}
             disabled={answers[questionIndex] === undefined}
